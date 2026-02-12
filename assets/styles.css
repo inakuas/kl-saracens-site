@@ -7,7 +7,7 @@ body {
 
 /* HERO */
 .hero {
-  background: url('hero.jpg') center/cover no-repeat;
+  background: url('./assets/hero.jpg') center/cover no-repeat;
   text-align: center;
   padding: 80px 20px;
   color: white;
