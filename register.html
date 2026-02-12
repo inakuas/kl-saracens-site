@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Player Registration – KL Saracens</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html" class="btn-link">← Back to Home</a>
+    <h1>KL Saracens – Player Registration</h1>
+  </header>
+
+  <main>
+    <form id="regForm" class="form">
+
+      <h2>Player Information</h2>
+      <label>Player Name</label>
+      <input type="text" name="player_name" required>
+
+      <label>Date of Birth</label>
+      <input type="date" name="dob" required>
+
+      <label>Age Group</label>
+      <select name="age_group" required>
+        <option value="U6">U6</option>
+        <option value="U8">U8</option>
+        <option value="U10">U10</option>
+        <option value="U12">U12</option>
+        <option value="U14">U14</option>
+        <option value="U16">U16</option>
+        <option value="U18">U18</option>
+      </select>
+
+      <label>Gender</label>
+      <select name="gender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <label>Experience Level</label>
+      <select name="experience" required>
+        <option value="New">New</option>
+        <option value="1-2 years">1–2 years</option>
+        <option value="3+ years">3+ years</option>
+      </select>
+
+      <h2>Parent/Guardian Information</h2>
+      <label>Parent Name</label>
+      <input type="text" name="parent_name" required>
+
+      <label>Parent Email</label>
+      <input type="email" name="email" required>
+
+      <label>Parent WhatsApp Number</label>
+      <input type="text" name="phone" placeholder="+60123456789" required>
+
+      <label>Secondary Contact (optional)</label>
+      <input type="text" name="secondary_contact">
+
+      <h2>Medical & Safety</h2>
+      <label>Allergies (optional)</label>
+      <input type="text" name="allergies">
+
+      <label>Medical Conditions (optional)</label>
+      <input type="text" name="medical">
+
+      <label>Emergency Contact Name</label>
+      <input type="text" name="emergency_name" required>
+
+      <label>Emergency Contact Number</label>
+      <input type="text" name="emergency_phone" required>
+
+      <h2>Consent</h2>
+      <label class="checkbox">
+        <input type="checkbox" name="photo_consent">
+        I allow KL Saracens to use photos/videos for club purposes.
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" name="data_consent" required>
+        I agree to KL Saracens storing this information for club use.
+      </label>
+
+      <h2>Additional Notes</h2>
+      <textarea name="notes"></textarea>
+
+      <button type="submit" class="btn-primary">Submit Registration</button>
+      <p id="status" class="status"></p>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById("regForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const statusEl = document.getElementById("status");
+      statusEl.textContent = "Submitting...";
+      statusEl.style.color = "#333";
+
+      const form = new FormData(e.target);
+      const data = Object.fromEntries(form.entries());
+
+      data.photo_consent = form.get("photo_consent") ? true : false;
+      data.data_consent = form.get("data_consent") ? true : false;
+
+      try {
+        const res = await fetch("https://your-backend-url/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        statusEl.textContent = result.message || "Registration submitted.";
+        statusEl.style.color = "green";
+        e.target.reset();
+      } catch (err) {
+        statusEl.textContent = "Unable to submit right now. Please try again later.";
+        statusEl.style.color = "red";
+      }
+    });
+  </script>
+
+</body>
+</html>
